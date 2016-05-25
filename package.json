@@ -25,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^2.9.0",
+    "express": "^4.13.4",
     "mocha": "~2.3.4",
     "os-tmpdir": "^1.0.1",
     "rimraf": "^2.5.2",
