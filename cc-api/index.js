@@ -2,7 +2,12 @@ var express = require('express');
 var url = require('url');
 var querystring = require('querystring');
 var yakbak = require('../index.js');
-var debug = require('debug')('cc-api-mock:server');
+var debug = require('debug')('cc-api-mock');
+
+var ranking = require('./ranking.js');
+var alternative = require('./alternative.js');
+var complete = require('./complete.js');
+var complete_options = require('./complete_options.js');
 
 
 var api = yakbak('https://api2.cloudcutout.com', {
@@ -11,13 +16,16 @@ var api = yakbak('https://api2.cloudcutout.com', {
 
 var mock = express();
 
+// mock ranking model
+mock.get('/cloudcutout-workflow-job-service/rest/session/*/ranking.json', ranking);
+
 // mock all rendering models
-mock.use('/cloudcutout-workflow-job-service/rest/session/session_:1/data_:2/*/cutout.png', function(req, res){
-	debug('Serving alternative.png');
-	res.header('Access-Control-Allow-Origin', 'http://localhost:9000');
-	res.header('Access-Control-Allow-Credentials', 'true');
-	res.sendFile(__dirname+'/alternative.png');
-});
+mock.get('/cloudcutout-workflow-job-service/rest/session/session_:1/data_:2/*/cutout.png', alternative);
+
+// mock complete call
+mock.options('/cloudcutout-workflow-job-service/rest/jobs/*/complete', complete_options);
+
+mock.get('/cloudcutout-workflow-job-service/rest/jobs/*/complete', complete);
 /*
 // scrub convert_args if -crop is present
 mock.use(function(req, res, next){

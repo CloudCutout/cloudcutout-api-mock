@@ -1,1 +1,1 @@
-DEBUG=yakbak:*,cc-api-mock:* node cc-api
+DEBUG=yakbak:*,cc-api-mock node cc-api
